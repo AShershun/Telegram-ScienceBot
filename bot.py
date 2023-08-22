@@ -7,7 +7,7 @@ import telebot
 import urllib3
 import requests
 import logging
-
+import os
 
 bot = telebot.TeleBot(os.environ.get('TLGRM_TOKEN'))
 logging.basicConfig(filename="Telebot.log", level=logging.INFO)
