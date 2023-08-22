@@ -5,17 +5,15 @@ from telebot.types import Message
 from telebot import types
 import telebot
 import urllib3
-import config
 import requests
 import logging
 
-# tlgrm_token = "767284162:AAH1ziJZhG4f-_A_Hr7_chT8CMqlU8gcdTw"
-# elseiver = c60f9365d510c61fef0827eda5a9fb17
 
-bot = telebot.TeleBot(config.tlgrm_token)
+bot = telebot.TeleBot(os.environ.get('TLGRM_TOKEN'))
 logging.basicConfig(filename="Telebot.log", level=logging.INFO)
 time = datetime.datetime.today()
-
+elsevier_token = os.environ.get('ELSEVIER_TOKEN')
+elsevier_apikey = os.environ.get('ELSEVIER_APIKEY')
 
 @bot.message_handler(commands=['start'])
 @bot.edited_message_handler(commands=['start'])
@@ -50,7 +48,7 @@ def responses_issn(message: Message):
 
     try:
         issn = message.text
-        url = 'https://api.elsevier.com/content/serial/title/issn/' + issn + '?apiKey=' + config.elsevier_token
+        url = 'https://api.elsevier.com/content/serial/title/issn/' + issn + '?apiKey=' + elsevier_token
         logging.info("\n\n[" + str(time) + "] - ISSN request:" +
                      "\nUser: " + str(message.chat.username) + "\nISSN - " + str(issn) + "\nAPI url: " + str(
             url) + "\nScanning JSON...\n\n\n")
@@ -64,7 +62,7 @@ def responses_issn(message: Message):
         }
 
         params = (
-            ('apiKey', 'c60f9365d510c61fef0827eda5a9fb17'),
+            ('apiKey', elsevier_apikey),
         )
 
         r = requests.get(url, headers=headers, params=params)
@@ -167,7 +165,7 @@ def responses_doi(message: Message):
 
     try:
         doi = message.text
-        url = 'https://api.elsevier.com/content/abstract/doi/' + doi + '?apiKey=' + config.elsevier_token
+        url = 'https://api.elsevier.com/content/abstract/doi/' + doi + '?apiKey=' + elsevier_token
         logging.info("\n[" + str(time) + "] - Doi request:" +
                      "\nUser: " + str(message.chat.username) + "\ndoi - " + str(doi) + "\nAPI url: " + str(
             url) + "\nScanning JSON...\n\n\n")
@@ -178,7 +176,7 @@ def responses_doi(message: Message):
         }
 
         params = (
-            ('apiKey', 'c60f9365d510c61fef0827eda5a9fb17'),
+            ('apiKey', elsevier_apikey),
         )
 
         r = requests.get(url, headers=headers, params=params)
